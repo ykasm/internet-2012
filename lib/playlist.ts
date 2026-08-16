@@ -9,24 +9,14 @@ export interface Track {
   year: number
   language: Language
   youtubeId: string
-  duration: number // seconds (approximate; real duration comes from the player)
+  duration: number
   artwork: string
 }
 
-/**
- * A curated ~2012 mixtape across English, Hindi and Punjabi.
- *
- * `youtubeId` is best-effort. A track with an empty `youtubeId` is treated as
- * "no reliable source" and is quietly excluded from the active queue (shown as
- * "—" in the drawer). At runtime, any track whose video turns out to be
- * unavailable/private/region-blocked is marked unavailable for the session and
- * skipped — see the player provider. Artwork is derived from the YouTube
- * thumbnail when a source exists, otherwise it falls back to the scene.
- */
 type RawTrack = Omit<Track, "artwork">
 
 const RAW: RawTrack[] = [
-  // ---------------------------------------------------------------- HINDI
+  // HINDI
   { id: "h1", title: "Pareshaan", artist: "Shalmali Kholgade", album: "Ishaqzaade", year: 2012, language: "hindi", youtubeId: "TfWM6NkELdA", duration: 292 },
   { id: "h2", title: "Paani Da Rang", artist: "Ayushmann Khurrana", album: "Vicky Donor", year: 2012, language: "hindi", youtubeId: "rBt02QCPMWc", duration: 296 },
   { id: "h3", title: "Aashiyan", artist: "Shreya Ghoshal, Nikhil Paul George", album: "Barfi!", year: 2012, language: "hindi", youtubeId: "9jY5MFN3Kd4", duration: 258 },
@@ -56,7 +46,7 @@ const RAW: RawTrack[] = [
   { id: "h27", title: "Manja", artist: "Amit Trivedi", album: "Kai Po Che!", year: 2013, language: "hindi", youtubeId: "", duration: 244 },
   { id: "h28", title: "Kabira", artist: "Tochi Raina, Rekha Bhardwaj", album: "Yeh Jawaani Hai Deewani", year: 2013, language: "hindi", youtubeId: "jHNNMj5bNQw", duration: 232 },
 
-  // ---------------------------------------------------------------- PUNJABI
+  // PUNJABI
   { id: "p1", title: "Brown Rang", artist: "Yo Yo Honey Singh", album: "International Villager", year: 2012, language: "punjabi", youtubeId: "iX4qQlm-0NY", duration: 261 },
   { id: "p2", title: "Angreji Beat", artist: "Gippy Grewal, Yo Yo Honey Singh", album: "International Villager", year: 2012, language: "punjabi", youtubeId: "ZTgvgmhC1gQ", duration: 254 },
   { id: "p3", title: "High Heels", artist: "Jaz Dhami, Yo Yo Honey Singh", album: "The Next Level", year: 2012, language: "punjabi", youtubeId: "Tkgad9gngOQ", duration: 263 },
@@ -69,13 +59,13 @@ const RAW: RawTrack[] = [
   { id: "p10", title: "Naag", artist: "Jazzy B", album: "Oh Kedi", year: 2000, language: "punjabi", youtubeId: "FESUzWhwmHc", duration: 266 },
   { id: "p11", title: "Saj Dhaj Ke", artist: "Mika Singh", album: "Mausam", year: 2011, language: "punjabi", youtubeId: "scdMD9PvWOo", duration: 231 },
   { id: "p12", title: "Jaan Ton Pyara", artist: "Miss Pooja", album: "Jaan Ton Pyara", year: 2011, language: "punjabi", youtubeId: "", duration: 268 },
-  { id: "p13", title: "Talli", artist: "Yo Yo Honey Singh, Sonu Kakkar", album: "International Villager", year: 2012, language: "punjabi", youtubeId: "", duration: 240 },
-  { id: "p14", title: "Gabru", artist: "Yo Yo Honey Singh, J-Star", album: "International Villager", year: 2012, language: "punjabi", youtubeId: "", duration: 249 },
   { id: "p15", title: "This Party Getting Hot", artist: "Jazzy B, Yo Yo Honey Singh", album: "This Party Getting Hot", year: 2012, language: "punjabi", youtubeId: "RsrhJp7Dwy0", duration: 234 },
-  { id: "p16", title: "Kan Kar Gal Sun Le", artist: "Babbu Maan", album: "Talaash", year: 2012, language: "punjabi", youtubeId: "", duration: 305 },
-  { id: "p17", title: "Range", artist: "Yo Yo Honey Singh", album: "International Villager", year: 2012, language: "punjabi", youtubeId: "", duration: 252 },
+  { id: "p18", title: "Amplifier", artist: "Imran Khan", album: "Unforgettable", year: 2009, language: "punjabi", youtubeId: "uuCFRaFWjwY", duration: 232 },
+  { id: "p19", title: "Satisfya", artist: "Imran Khan", album: "Satisfya", year: 2013, language: "punjabi", youtubeId: "pfVODjDBFxU", duration: 180 },
+  { id: "p20", title: "Pata Chalgea", artist: "Imran Khan", album: "Unforgettable", year: 2009, language: "punjabi", youtubeId: "mywMbbCD2zE", duration: 285 },
+  { id: "p21", title: "Aaja We Mahiya", artist: "Imran Khan", album: "Unforgettable", year: 2009, language: "punjabi", youtubeId: "qRTG8uF2ES4", duration: 232 },
 
-  // ---------------------------------------------------------------- ENGLISH
+  // ENGLISH
   { id: "e1", title: "Somebody That I Used to Know", artist: "Gotye ft. Kimbra", album: "Making Mirrors", year: 2011, language: "english", youtubeId: "8UVNT4wvIGY", duration: 244 },
   { id: "e2", title: "Call Me Maybe", artist: "Carly Rae Jepsen", album: "Kiss", year: 2012, language: "english", youtubeId: "fWNaR-rxAic", duration: 193 },
   { id: "e3", title: "We Are Young", artist: "fun. ft. Janelle Monáe", album: "Some Nights", year: 2011, language: "english", youtubeId: "Sv6dMFF_yts", duration: 260 },
@@ -110,9 +100,7 @@ const RAW: RawTrack[] = [
 
 export const PLAYLIST: Track[] = RAW.filter((t) => Boolean(t.youtubeId)).map((t) => ({
   ...t,
-  artwork: t.youtubeId
-    ? `https://img.youtube.com/vi/${t.youtubeId}/mqdefault.jpg`
-    : "/scene-2012.png",
+  artwork: `https://img.youtube.com/vi/${t.youtubeId}/mqdefault.jpg`,
 }))
 
 const LABELS: Record<LanguageChoice, string> = {
@@ -126,7 +114,6 @@ export function languageLabel(choice: LanguageChoice): string {
   return LABELS[choice] ?? String(choice).toUpperCase()
 }
 
-/** Tracks that belong to a language choice (does not consider availability). */
 export function tracksForChoice(choice: LanguageChoice): Track[] {
   if (choice === "mix") return PLAYLIST
   return PLAYLIST.filter((t) => t.language === choice)
@@ -137,8 +124,8 @@ export function artworkFor(track: Track): string {
 }
 
 export function formatTime(seconds: number): string {
-  if (!Number.isFinite(seconds) || seconds < 0) seconds = 0
-  const m = Math.floor(seconds / 60)
-  const s = Math.floor(seconds % 60)
-  return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`
+  const total = Math.max(0, Math.floor(seconds || 0))
+  const m = Math.floor(total / 60)
+  const s = total % 60
+  return `${m}:${s.toString().padStart(2, "0")}`
 }
